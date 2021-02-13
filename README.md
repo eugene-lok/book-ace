@@ -1,2 +1,3 @@
-# book-ace
-ENGO551 Lab 1 - Book Reviewer Web App 
+# Project 1
+
+ENGO 551
