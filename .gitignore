@@ -1,5 +1,6 @@
-*.sh
-.flaskenv
-.env
 *.pyc
+*.sh
+*.css.map
+.env
+.flaskenv
 /flask_session
