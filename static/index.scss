@@ -1,10 +1,31 @@
-.nav-link {
-    a {
-        color: "#FFFFFF";
-    }
-    
+a:hover {
+    text-decoration: none;
+}    
+
+.cover-container {
+    max-width: 80em;
+    max-height: 80vh;
 }
 
-.masthead .mb-auto {
-    margin-bottom: 50px !important;
+@media (min-width: 48em) {
+    .nav-masthead {
+        float: right;
+    }
+}
+
+.masthead {
+    margin-bottom: 2rem;
+    padding-bottom: 14rem;
+}
+
+.masthead-brand {
+    display: block;
+    margin: 0 auto;
+    a {
+        color: #000000;
+    }
+}
+
+.mastfoot {
+    float: bottom;
 }
