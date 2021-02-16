@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 
 from flask import Flask, session, render_template, request, flash, jsonify
 from flask_session import Session
@@ -119,3 +120,40 @@ def submitReview():
         return render_template("thankyou.html")
 
 # API access
+@app.route("/api/<string:isbn>", methods = ["GET"])
+def getAPI(isbn):
+    currentBook = db.execute("SELECT * FROM books WHERE isbn=:isbn", {"isbn":isbn}).fetchall()
+    if currentBook:
+        currentReviews = db.execute("SELECT * FROM reviews where isbn=:isbn", {"isbn":isbn}).fetchall()
+        # API Request
+        res = requests.get("https://www.googleapis.com/books/v1/volumes", params={"q": "isbn:" + isbn})
+        bookInfo = res.json()
+        title = bookInfo['items'][0]['volumeInfo']['title']
+        authors = bookInfo['items'][0]['volumeInfo']['authors'][0]
+        publishedDate = bookInfo['items'][0]['volumeInfo']['publishedDate']
+        isbns = bookInfo['items'][0]['volumeInfo']['industryIdentifiers']
+        isbn13 = isbns[0]['identifier']
+        isbn10 = isbns[1]['identifier']
+        reviewCount = len(currentReviews)
+        if reviewCount == 0:
+            averageRating = None
+        else:
+            totalRating = 0
+            for i in range(reviewCount):
+                totalRating += int(currentReviews[i][3])
+            averageRating = totalRating/reviewCount
+        bookObj = {
+            "title": title,
+            "author": authors,
+            "publishedDate": publishedDate,
+            "ISBN_13": isbn13,
+            "ISBN_10": isbn10,
+            "reviewCount": reviewCount,
+            "averageRating": averageRating
+        }
+        print(currentReviews)
+        print(bookObj)
+        return json.dumps(bookObj, indent=4)
+    else:
+        return "404: No book with matching ISBN."
+    # Convert to JSON
