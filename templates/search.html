@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h3>Your results for "{{ searchQuery }}."</h3>
+    <p>Select a book below to see its details.</p>
+
+
+    <!-- Logout -->
+    <a href = "{{ url_for('index') }}">Logout</a>
+{% endblock %}
