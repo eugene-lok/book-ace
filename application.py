@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, flash
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -22,13 +22,49 @@ Session(app)
 engine = create_engine(app.config.get("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-
-@app.route("/")
+# Login/landing page
+@app.route("/", methods = ["GET", "POST"])
 def index():
-    return render_template("login.html")
+    # Post-registration
+    if request.method == "POST":
+        try:
+            # Create login in DB
+            username = request.form.get("newUsername")
+            password = request.form.get("newPassword")
+            print(username)
+            print(password)
+            db.execute("INSERT INTO users (username, password) VALUES (:username, :password)", 
+            {"username": username, "password": password})
+            db.commit()
+            flash(f"Please login with your new credentials for {username}")
+            return render_template("login.html")
+        except:
+            return "Registration Unsuccessful."
+    else:
+        return render_template("login.html")
 
-
-@app.route("/logged_in", methods = ["POST"])
+# Main route
+@app.route("/logged_in", methods = ["GET", "POST"])
 def logged_in():
-    name = request.form.get("name")
-    return render_template("index.html")
+    if request.method == "GET":
+        return "Please go back and login."
+    else:
+        username = request.form.get("username")
+        password = request.form.get("password")
+        # Validate login
+        if db.execute("SELECT username FROM users WHERE username = :username AND password = :password", {"username": username, "password": password}).rowcount == 1:
+            session["login"] = username
+            return render_template("index.html", username = username, password = password)
+        else:
+            return "Invalid login." 
+        
+
+# Register page 
+@app.route("/register")
+def register():
+    return render_template("register.html")
+
+# Post registration page
+@app.route("/register_success")
+def register_success():
+    return render_template("register_success.html")
