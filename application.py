@@ -43,6 +43,11 @@ def index():
     else:
         return render_template("login.html")
 
+# Register page 
+@app.route("/register")
+def register():
+    return render_template("register.html")
+
 # Main route
 @app.route("/logged_in", methods = ["GET", "POST"])
 def logged_in():
@@ -58,13 +63,24 @@ def logged_in():
         else:
             return "Invalid login." 
         
+# Search results
+@app.route("/search", methods = ["POST"])
+def search():
+    searchType = request.form.get("searchType")
+    searchQuery = request.form.get("findBook")
+    print(f'searchType{searchType}')
+    print(f'findBook{searchQuery}')
+    if searchType == 'isbn':
+        searchResults = db.execute("SELECT * FROM books WHERE isbn LIKE :isbn", {"isbn": "%" + searchQuery + "%"}).fetchall()
+    elif searchType == 'author':
+        searchResults = db.execute("SELECT * FROM books WHERE author LIKE :author", {"author": "%" + searchQuery + "%"}).fetchall()
+    elif searchType == 'title':
+        searchResults = db.execute("SELECT * FROM books WHERE title LIKE :title", {"title": "%" + searchQuery + "%"}).fetchall()
+    else:
+        return "How did this even happen?"
+    # Validate search result 
+    if searchResults != "[]":
+        return render_template("search.html", searchQuery = searchQuery, searchResults = searchResults)
+    else:
+        return "Search failed."
 
-# Register page 
-@app.route("/register")
-def register():
-    return render_template("register.html")
-
-# Post registration page
-@app.route("/register_success")
-def register_success():
-    return render_template("register_success.html")
