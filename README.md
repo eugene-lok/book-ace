@@ -1,6 +1,6 @@
 # What is Book Ace?
 ## ENGO 551 Winter 2021 Lab 1 Submission 
-Book Ace is a Flask application allowing users to review and submit their opinions on a catalogue of thousands of books. 
+Book Ace is a Flask application allowing users to review and submit their book reviews through a catalogue of thousands of books. 
 
 # Tech Stack
 Flask, SQL, SCSS
