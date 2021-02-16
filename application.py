@@ -51,8 +51,13 @@ def logged_in():
     else:
         username = request.form.get("username")
         password = request.form.get("password")
-        session["login"] = username
-        return render_template("index.html", username = username, password = password)
+        # Validate login
+        if db.execute("SELECT username FROM users WHERE username = :username AND password = :password", {"username": username, "password": password}).rowcount == 1:
+            session["login"] = username
+            return render_template("index.html", username = username, password = password)
+        else:
+            return "Invalid login." 
+        
 
 # Register page 
 @app.route("/register")
