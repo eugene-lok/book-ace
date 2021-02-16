@@ -90,7 +90,7 @@ def search():
 @app.route("/details", methods = ["POST"])
 def getDetails():
     isbn = request.form.get("bookID")
-    print(isbn)
+    session["isbn"] = isbn
     # API request
     res = requests.get("https://www.googleapis.com/books/v1/volumes", params={"q": "isbn:" + isbn})
     bookInfo = res.json()
@@ -101,11 +101,21 @@ def getDetails():
     googleRating = bookInfo['items'][0]['volumeInfo']['averageRating']
     return render_template("details.html", isbn = isbn, title = title, authors = authors, year = year, googleCount = googleCount, googleRating = googleRating)
 
+# Submit review
 @app.route("/thankyou", methods = ["POST"])
 def submitReview():
     username = session["login"]
-    isbn = request.form.get("bookID")
+    isbn = session["isbn"]
     rating = request.form.get("rating")
     review = request.form.get("review")
-    print(username) 
-    return render_template("thankyou.html")
+    # Submit to DB
+    isDuplicate = db.execute("SELECT * FROM reviews WHERE username = :username AND isbn = :isbn", {"username": username,"isbn": isbn}).rowcount
+    print(f'Duplicate?{isDuplicate}')
+    if isDuplicate:
+        return "You've already reviewed this book!"
+    else:
+        db.execute("INSERT INTO reviews (username, isbn, rating, review) VALUES (:username, :isbn, :rating, :review)", {"username":username, "isbn":isbn, "rating":rating, "review":review})
+        db.commit()
+        return render_template("thankyou.html")
+
+# API access

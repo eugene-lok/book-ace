@@ -8,7 +8,7 @@
     </p>
     <form action = "{{ url_for('logged_in') }}" method = "post">
       <input type = "text" name = "username" placeholder = "Username">
-      <input type = "text" name = "password" placeholder = "Password">
+      <input type = "password" name = "password" placeholder = "Password">
       <button>Login</button>
     </form> 
     <a href = "{{ url_for('register') }}">New User? Register here.</a>
