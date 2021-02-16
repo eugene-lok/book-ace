@@ -2,12 +2,23 @@
 
 {% block body %}
 <h3> Here are your selected book's details. </h3>
-
+    <h5>{{ title }}</h5>
+    <p>Authors: 
+        {% for author in authors %}
+        {{ author }} 
+        {% endfor %}
+    </p>
+    <p>Published in {{ year }}, ISBN {{ isbn }}</p>    
+    <p>Google Rating: {{ googleRating }}</p>
+    <p># of Reviews: {{ googleCount }}</p>
 <p>Submit your own review below!</p>
 <form action = "{{ url_for('submitReview') }}" method  = "POST">
     <label for = "rating">What's your rating for this book? (1-5)</label>
     <br>
     <input type = "range" id = "rating" name = "rating" min = "1" max = "5">
+    <br>
+    <p>What's your opinion on this book?</p>
+    <textarea id="review" name="review" rows="3" cols="50"></textarea>
     <br>
     <button>Submit Rating</button>
 </form>

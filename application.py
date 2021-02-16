@@ -91,10 +91,21 @@ def search():
 def getDetails():
     isbn = request.form.get("bookID")
     print(isbn)
-    
-    return render_template("details.html", isbn = isbn)
+    # API request
+    res = requests.get("https://www.googleapis.com/books/v1/volumes", params={"q": "isbn:" + isbn})
+    bookInfo = res.json()
+    title = bookInfo['items'][0]['volumeInfo']['title']
+    authors = bookInfo['items'][0]['volumeInfo']['authors']
+    year = bookInfo['items'][0]['volumeInfo']['publishedDate'][0:4]
+    googleCount = bookInfo['items'][0]['volumeInfo']['ratingsCount']
+    googleRating = bookInfo['items'][0]['volumeInfo']['averageRating']
+    return render_template("details.html", isbn = isbn, title = title, authors = authors, year = year, googleCount = googleCount, googleRating = googleRating)
 
 @app.route("/thankyou", methods = ["POST"])
-def submitReview(): 
-
+def submitReview():
+    username = session["login"]
+    isbn = request.form.get("bookID")
+    rating = request.form.get("rating")
+    review = request.form.get("review")
+    print(username) 
     return render_template("thankyou.html")
