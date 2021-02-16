@@ -1,5 +1,19 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h4 class = "username"> Welcome, {{ username }}</h4>
+<h4 class = "username"> Welcome, {{ username }}.</h4>
+<p>Search for a book below.</p>
+<form> 
+    <label for="books">Search by:</label>
+    <select id="books" name="books">
+        <option value="isbn">ISBN</option>
+        <option value="title">Title</option>
+        <option value="author">Author</option>
+    </select>
+    <input type="search" name="findBook" placeholder="Search Here">
+    <button>Submit Query</button>
+</form>
+
+<!-- Logout -->
+<a href = "{{ url_for('index') }}">Logout</a>
 {% endblock %}
