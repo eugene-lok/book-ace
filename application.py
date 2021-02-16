@@ -84,3 +84,7 @@ def search():
     else:
         return "Search failed."
 
+# Get book details
+@app.route("/details", methods = ["POST"])
+def getDetails():
+    return render_template("details.html")
