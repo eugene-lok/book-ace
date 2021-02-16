@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h3>Register your new username and password here.</h3>
+    <form action = "{{ url_for('index') }}" method = "post">
+        <input type = "text" name = "newUsername" placeholder = "Username">
+        <input type = "text" name = "newPassword" placeholder = "Password">
+        <button>Register</button>
+    </form>
+{% endblock %}

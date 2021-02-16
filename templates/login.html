@@ -5,12 +5,13 @@
     <h1 class="cover-heading">Share your love for literacy.</h1>
     <p class="lead">Book Ace is a great way to find and review your favourite books.</p>
     <p class="lead">
-      <a href="#" class="btn btn-lg btn-secondary">Login</a>
     </p>
     <form action = "{{ url_for('logged_in') }}" method = "post">
-      <input type = "text" name = "name" placeholder = "Username">
+      <input type = "text" name = "username" placeholder = "Username">
+      <input type = "text" name = "password" placeholder = "Password">
       <button>Login</button>
-    </form>
+    </form> 
+    <a href = "{{ url_for('register') }}">New User? Register here.</a>
   </main>
 
   <footer class="mastfoot mt-auto">
