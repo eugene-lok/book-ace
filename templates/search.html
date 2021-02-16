@@ -5,7 +5,13 @@
     <p>Select a book below to see its details.</p>
     <p>{{ searchResults }}</p>
     <form action = "{{ url_for('getDetails') }}" method = "POST">
-        <button>Get Book</button>
+        <select class="form-control" name="result_id">
+            {% for result in searchResults %}
+                <input type = "radio" name = "bookID" value="{{ result.0 }}"> "{{ result.1 }}" by {{ result.2 }}
+            {% endfor %}
+        </select>
+        <br>
+        <button>See Book Details</button>
     </form>
 
     <!-- Logout -->

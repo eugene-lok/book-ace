@@ -1,6 +1,7 @@
 import os
+import requests
 
-from flask import Flask, session, render_template, request, flash
+from flask import Flask, session, render_template, request, flash, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -80,6 +81,7 @@ def search():
         return "How did this even happen?"
     # Validate search result 
     if searchResults != "[]":
+        #searchJSON = jsonify(searchResults)
         return render_template("search.html", searchQuery = searchQuery, searchResults = searchResults)
     else:
         return "Search failed."
@@ -87,4 +89,12 @@ def search():
 # Get book details
 @app.route("/details", methods = ["POST"])
 def getDetails():
-    return render_template("details.html")
+    isbn = request.form.get("bookID")
+    print(isbn)
+    
+    return render_template("details.html", isbn = isbn)
+
+@app.route("/thankyou", methods = ["POST"])
+def submitReview(): 
+
+    return render_template("thankyou.html")

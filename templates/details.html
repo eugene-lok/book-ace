@@ -1,5 +1,17 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h1> Details here.</h1>
+<h3> Here are your selected book's details. </h3>
+
+<p>Submit your own review below!</p>
+<form action = "{{ url_for('submitReview') }}" method  = "POST">
+    <label for = "rating">What's your rating for this book? (1-5)</label>
+    <br>
+    <input type = "range" id = "rating" name = "rating" min = "1" max = "5">
+    <br>
+    <button>Submit Rating</button>
+</form>
+
+<!-- Logout -->
+<a href = "{{ url_for('index') }}">Logout</a>
 {% endblock %}
