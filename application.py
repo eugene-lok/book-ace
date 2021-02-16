@@ -27,12 +27,19 @@ db = scoped_session(sessionmaker(bind=engine))
 def index():
     # Post-registration
     if request.method == "POST":
-        username = request.form.get("newUsername")
-        password = request.form.get("newPassword")
-        # Create login in DB
-        
-        flash(f"Please login with your new credentials for {username}")
-        return render_template("login.html")
+        try:
+            # Create login in DB
+            username = request.form.get("newUsername")
+            password = request.form.get("newPassword")
+            print(username)
+            print(password)
+            db.execute("INSERT INTO users (username, password) VALUES (:username, :password)", 
+            {"username": username, "password": password})
+            db.commit()
+            flash(f"Please login with your new credentials for {username}")
+            return render_template("login.html")
+        except:
+            return "Registration Unsuccessful."
     else:
         return render_template("login.html")
 
